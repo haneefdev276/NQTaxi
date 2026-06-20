@@ -18,7 +18,7 @@ export default function Login() {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
-  const { setRole, setAuthenticated, setDriverOtpVerified } = useAppStore();
+  const { setRole, setAuthenticated } = useAppStore();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -38,8 +38,7 @@ export default function Login() {
         setAuthenticated(true);
         setLoading(false);
         if (userRole === 'driver') {
-          setDriverOtpVerified(true);
-          navigate('/driver/dashboard', { replace: true });
+          navigate('/driver', { replace: true });
         } else if (userRole === 'admin') {
           navigate('/admin', { replace: true });
         } else {

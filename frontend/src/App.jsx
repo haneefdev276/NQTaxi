@@ -48,7 +48,7 @@ import UsersDirectory from './pages/admin/UsersDirectory';
 // Components
 import BookingSpinner from './components/customer/BookingSpinner';
 import { initializeAuthService, logout, restoreAuthSession } from './services/authService';
-import { useAppStore, ONBOARDING_STEPS } from './store/useAppStore';
+import { useAppStore } from './store/useAppStore';
 
 const sampleRide = {
   id: "auto",
@@ -62,7 +62,7 @@ const sampleRide = {
 
 function App() {
   const [authReady, setAuthReady] = useState(false);
-  const { isAuthenticated, setAuthenticated, role, setRole, resetDriverState } = useAppStore();
+  const { isAuthenticated, setAuthenticated, role, setRole } = useAppStore();
   const [step, setStep] = useState("home");
   const [rideData, setRideData] = useState({
     pickup: "",
@@ -77,7 +77,6 @@ function App() {
     logout();
     setAuthenticated(false);
     setRole('rider');
-    resetDriverState();
     // Uncomment below to restore session functionality
     // const sessionData = restoreAuthSession();
     // if (sessionData) {
@@ -143,8 +142,8 @@ function App() {
         <Route path="/customer/reports" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout><Reports /></Layout></ProtectedRoute>} />
 
         {/* Driver Routes */}
-        <Route path="/driver/profile-setup" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="driver"><DriverProfileGuard><DriverProfileSetup /></DriverProfileGuard></ProtectedRoute>} />
-        <Route path="/driver/document-verification" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="driver"><DriverDocumentGuard><DocumentVerification /></DriverDocumentGuard></ProtectedRoute>} />
+        <Route path="/driver/profile-setup" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="driver"><DriverProfileSetup /></ProtectedRoute>} />
+        <Route path="/driver/document-verification" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="driver"><DocumentVerification /></ProtectedRoute>} />
         <Route path="/driver/dashboard" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="driver"><DriverWorkflowGuard><DriverHomePage /></DriverWorkflowGuard></ProtectedRoute>} />
         {/* <Route path="/driver/new-request" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="driver"><NewRideRequest /></ProtectedRoute>} /> */}
         <Route path="/driver/wallet" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="driver"><DriverWorkflowGuard><WalletDashboard /></DriverWorkflowGuard></ProtectedRoute>} />
@@ -231,22 +230,8 @@ if (step === "driverOnWay") {
   }
 }
 
-function getDriverRedirectPath(driver) {
-  if (!driver.isOtpVerified) {
-    return "/otp-verification";
-  }
-  if (!driver.profileCompleted || driver.onboardingStep === ONBOARDING_STEPS.STEP_1_PROFILE_SETUP) {
-    return "/driver/profile-setup";
-  }
-  if (!driver.documentsCompleted || driver.onboardingStep === ONBOARDING_STEPS.STEP_2_DOCUMENT_VERIFICATION) {
-    return "/driver/document-verification";
-  }
-  return "/driver/dashboard";
-}
-
 function ProtectedRoute({ authReady, isAuthenticated, role, allowedRole, children }) {
   const location = useLocation();
-  const { driver } = useAppStore();
 
   if (!authReady) {
     return (
@@ -262,24 +247,22 @@ function ProtectedRoute({ authReady, isAuthenticated, role, allowedRole, childre
 
   // Role-based redirection
   if (allowedRole === "rider" && role !== "rider") {
-    return <Navigate to={role === "driver" ? getDriverRedirectPath(driver) : "/admin"} replace />;
+    return <Navigate to={role === "driver" ? "/driver/dashboard" : "/admin"} replace />;
   }
   if (allowedRole === "driver" && role !== "driver") {
     return <Navigate to={role === "rider" ? "/customer/dashboard" : "/admin"} replace />;
   }
   if (allowedRole === "admin" && role !== "admin") {
-    return <Navigate to={role === "rider" ? "/customer/dashboard" : getDriverRedirectPath(driver)} replace />;
+    return <Navigate to={role === "rider" ? "/customer/dashboard" : "/driver/dashboard"} replace />;
   }
 
   return children;
 }
 
 function PublicRoute({ isAuthenticated, role, children }) {
-  const { driver } = useAppStore();
-
   if (isAuthenticated) {
     if (role === "driver") {
-      return <Navigate to={getDriverRedirectPath(driver)} replace />;
+      return <Navigate to="/driver/dashboard" replace />;
     } else if (role === "admin") {
       return <Navigate to="/admin" replace />;
     } else {
@@ -290,34 +273,19 @@ function PublicRoute({ isAuthenticated, role, children }) {
   return children;
 }
 
-function DriverProfileGuard({ children }) {
-  const { driver } = useAppStore();
-  const redirectPath = getDriverRedirectPath(driver);
-
-  if (redirectPath === "/otp-verification") {
-    return <Navigate to="/otp-verification" replace />;
-  }
-
-  return children;
-}
-
-function DriverDocumentGuard({ children }) {
-  const { driver } = useAppStore();
-  const redirectPath = getDriverRedirectPath(driver);
-
-  if (redirectPath === "/otp-verification" || redirectPath === "/driver/profile-setup") {
-    return <Navigate to={redirectPath} replace />;
-  }
-
-  return children;
-}
-
 function DriverWorkflowGuard({ children }) {
   const { driver } = useAppStore();
-  const redirectPath = getDriverRedirectPath(driver);
   
-  if (redirectPath !== "/driver/dashboard") {
-    return <Navigate to={redirectPath} replace />;
+  if (!driver.isOtpVerified) {
+    return <Navigate to="/" replace />;
+  }
+  
+  if (!driver.profileCompleted) {
+    return <Navigate to="/driver/profile-setup" replace />;
+  }
+  
+  if (!driver.documentsCompleted) {
+    return <Navigate to="/driver/document-verification" replace />;
   }
 
   return children;
@@ -442,13 +410,12 @@ function useAdminNavigate() {
 
 function Layout({ children }) {
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
-  const { setAuthenticated, setRole, resetDriverState } = useAppStore();
+  const { setAuthenticated, setRole } = useAppStore();
 
   const handleLogout = () => {
     logout();
     setAuthenticated(false);
     setRole('rider');
-    resetDriverState();
   };
 
   return (
