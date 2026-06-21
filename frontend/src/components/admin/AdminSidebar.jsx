@@ -1,12 +1,17 @@
 import { NavLink } from 'react-router-dom'
 import {
-  LayoutDashboard, Headphones, ChevronDown, Map, Car,
+  LayoutDashboard, Headphones, ChevronDown, Map, Car, Gift, HelpCircle
 } from 'lucide-react'
 
 const navItems = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/admin/support', label: 'Support', icon: Headphones },
+  { to: '/admin/support', label: 'Support Inbox', icon: Headphones },
   { to: '/admin/live-map', label: 'Live Map', icon: Map },
+]
+
+const customerNavItems = [
+  { to: '/customer/refer-earn', label: 'Refer & Earn', icon: Gift },
+  { to: '/customer/support-help', label: 'Help Center', icon: HelpCircle },
 ]
 
 export default function AdminSidebar() {
@@ -25,6 +30,9 @@ export default function AdminSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+        <div className="px-3 mb-2 text-[10px] uppercase font-bold text-white/30 tracking-wider">
+          Admin Panel
+        </div>
         {navItems.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
@@ -33,6 +41,26 @@ export default function AdminSidebar() {
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive
                   ? 'bg-brand-yellow text-brand-black'
+                  : 'text-white/50 hover:text-white hover:bg-white/5'
+              }`
+            }
+          >
+            <Icon className="w-[18px] h-[18px]" />
+            {label}
+          </NavLink>
+        ))}
+
+        <div className="pt-5 px-3 mb-2 text-[10px] uppercase font-bold text-white/30 tracking-wider border-t border-white/5 mt-4">
+          Rider Portal Demo
+        </div>
+        {customerNavItems.map(({ to, label, icon: Icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive
+                  ? 'bg-brand-yellow text-brand-black shadow-lg shadow-brand-yellow/10'
                   : 'text-white/50 hover:text-white hover:bg-white/5'
               }`
             }

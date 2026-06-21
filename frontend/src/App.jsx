@@ -6,6 +6,11 @@ import SupportInboxPage from '@pages/admin/SupportInboxPage'
 import SupportChatPage from '@pages/admin/SupportChatPage'
 import LiveMapPage     from '@pages/admin/LiveMapPage'
 
+// Customer Pages & Layout
+import CustomerLayout  from '@components/customer/CustomerLayout'
+import SupportHelpPage from '@pages/customer/SupportHelpPage'
+import ReferEarnPage   from '@pages/customer/ReferEarnPage'
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -17,6 +22,25 @@ export default function App() {
         <Route path="/admin/support" element={<SupportInboxPage />} />
         <Route path="/admin/support/chat" element={<SupportChatPage />} />
         <Route path="/admin/live-map" element={<LiveMapPage />} />
+        
+        {/* Customer Routes */}
+        <Route 
+          path="/customer/support-help" 
+          element={
+            <CustomerLayout title="Support & Help Center">
+              <SupportHelpPage />
+            </CustomerLayout>
+          } 
+        />
+        <Route 
+          path="/customer/refer-earn" 
+          element={
+            <CustomerLayout title="Refer & Earn">
+              <ReferEarnPage />
+            </CustomerLayout>
+          } 
+        />
+
         <Route path="*" element={<Navigate to="/admin/login" replace />} />
       </Routes>
     </BrowserRouter>
