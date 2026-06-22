@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Route, IndianRupee, Star, Clock } from 'lucide-react';
-import DriverHeader from '../../components/driver/DriverHeader';
+import DriverHead from '../../components/driver/DriverHead';
 import StatCard from '../../components/driver/StatCard';
 
 export default function DriverStats() {
@@ -31,7 +31,7 @@ export default function DriverStats() {
   return (
     <div className="min-h-screen bg-background text-text pb-24 md:pb-8 flex flex-col">
       {/* Navigation Header */}
-      <DriverHeader title="Performance Stats" />
+      <DriverHead title="Performance Stats" />
 
       {/* Main Body */}
       <main className="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full space-y-6">

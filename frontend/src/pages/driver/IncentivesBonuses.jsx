@@ -1,5 +1,5 @@
 import React from 'react';
-import DriverHeader from '../../components/driver/DriverHeader';
+import DriverHead from '../../components/driver/DriverHead';
 import BonusCard from '../../components/driver/BonusCard';
 
 export default function IncentivesBonuses() {
@@ -36,7 +36,7 @@ export default function IncentivesBonuses() {
   return (
     <div className="min-h-screen bg-background text-text pb-24 md:pb-8 flex flex-col">
       {/* Navigation Header */}
-      <DriverHeader title="Incentives &amp; Bonuses" />
+      <DriverHead title="Incentives &amp; Bonuses" />
 
       {/* Main Body */}
       <main className="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full space-y-6">

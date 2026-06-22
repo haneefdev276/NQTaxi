@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DriverHeader from '../../components/driver/DriverHeader';
+import DriverHead from '../../components/driver/DriverHead';
 import TripCard from '../../components/driver/TripCard';
 
 export default function TripHistory() {
@@ -30,7 +30,7 @@ export default function TripHistory() {
   return (
     <div className="min-h-screen bg-background text-text pb-24 md:pb-8 flex flex-col">
       {/* Navigation Header */}
-      <DriverHeader title="Trip History" />
+      <DriverHead title="Trip History" />
 
       {/* Main Body */}
       <main className="flex-1 p-4 md:p-8 max-w-3xl mx-auto w-full space-y-6">

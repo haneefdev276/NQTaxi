@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DriverHeader from '../../components/driver/DriverHeader';
+import DriverHead from '../../components/driver/DriverHead';
 import BankCard from '../../components/driver/BankCard';
 import { ShieldCheck, Info, X, Check } from 'lucide-react';
 
@@ -77,7 +77,7 @@ export default function BankDetailsPayouts() {
       )}
 
       {/* Navigation Header */}
-      <DriverHeader title="Bank Details &amp; Payouts" />
+      <DriverHead title="Bank Details &amp; Payouts" />
 
       {/* Main Body */}
       <main className="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full space-y-6">

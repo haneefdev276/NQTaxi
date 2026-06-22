@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Car, Gift, Coins, Info } from 'lucide-react';
-import DriverHeader from '../../components/driver/DriverHeader';
+import DriverHead from '../../components/driver/DriverHead';
 import EarningChart from '../../components/driver/EarningChart';
 
 export default function EarningsDashboard() {
@@ -34,7 +34,7 @@ export default function EarningsDashboard() {
   return (
     <div className="min-h-screen bg-background text-text pb-24 md:pb-8 flex flex-col">
       {/* Driver Navigation Header */}
-      <DriverHeader title="Earnings" />
+      <DriverHead title="Earnings" />
 
       {/* Main Body */}
       <main className="flex-1 p-4 md:p-8 max-w-3xl mx-auto w-full space-y-6">
