@@ -27,6 +27,11 @@ import BottomNavigation from '../../components/driver/BottomNavigation';
 import MoreDrawer from '../../components/driver/MoreDrawer';
 import SidebarNavigation from '../../components/driver/SidebarNavigation';
 import DriverStatusCard from '../../components/driver/DriverStatusCard';
+import RideInProgress from '../../components/driver/RideInProgress';
+import TripCompletion from '../../components/driver/TripCompletion';
+import PaymentConfirmation from '../../components/driver/PaymentConfirmation';
+import CustomerRating from '../../components/driver/CustomerRating';
+import TripDetails from '../../components/driver/TripDetails';
 import {
   driverData,
   earningsData,
@@ -422,6 +427,16 @@ export default function DriverHomePage() {
                 </div>
               </div>
             </div>
+          </div>
+          {/* Ride workflow sections */}
+          <RideInProgress />
+          <div className="grid lg:grid-cols-2 gap-6">
+            <TripCompletion />
+            <PaymentConfirmation />
+          </div>
+          <div className="grid lg:grid-cols-2 gap-6">
+            <CustomerRating />
+            <TripDetails />
           </div>
         </main>
       </div>
