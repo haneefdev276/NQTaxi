@@ -1,4 +1,3 @@
-
 import {
   FileText,
   Navigation,
@@ -29,4 +28,3 @@ export const sidebarNavItems = [
   { id: 'payment-confirmation', label: 'Payment Confirmation', icon: CreditCard, path: '/driver/dashboard#payment-confirmation' },
   { id: 'customer-rating', label: 'Customer Rating', icon: MessageSquare, path: '/driver/dashboard#customer-rating' },
 ];
-
