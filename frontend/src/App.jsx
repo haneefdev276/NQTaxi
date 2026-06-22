@@ -12,6 +12,11 @@ import BottomNavigation from './components/customer/BottomNavigation';
 import MoreDrawer from './components/customer/MoreDrawer';
 import SidebarNavigation from './components/customer/SidebarNavigation';
 
+// Driver Nav Components
+import DriverBottomNavigation from './components/driver/BottomNavigation';
+import DriverMoreDrawer from './components/driver/MoreDrawer';
+import DriverSidebarNavigation from './components/driver/SidebarNavigation';
+
 // Customer Pages
 import Homemapbase from './pages/customer/Homemapbase';
 import RideOptions from './pages/customer/RideOptions';
@@ -448,6 +453,55 @@ function useAdminNavigate() {
     };
     navigate(routes[pageId] || "/admin");
   };
+}
+
+function DriverLayout({ children }) {
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const { setAuthenticated, setRole, resetDriverState } = useAppStore();
+
+  const handleLogout = () => {
+    logout();
+    setAuthenticated(false);
+    setRole('rider');
+    resetDriverState();
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0D0D0D] flex flex-col md:flex-row text-white">
+      {/* Sidebar (Tablet/Desktop) */}
+      <DriverSidebarNavigation />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        {/* Mobile Header */}
+        <div className="md:hidden sticky top-0 z-40 border-b border-gray-800 bg-[#1A1A1A]/95 px-4 py-3 backdrop-blur-sm flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <svg className="w-8 h-8" viewBox="0 0 44 30" fill="none">
+              <rect x="3" y="12" width="38" height="14" rx="4" fill="#F5C518" stroke="#1A1A1A" strokeWidth="1.5" />
+              <path d="M10 12 L14 6 H30 L34 12 Z" fill="#F5C518" stroke="#1A1A1A" strokeWidth="1.5" />
+            </svg>
+            <span className="text-xl font-bold text-primary">NQTaxi</span>
+          </div>
+          <span className="text-xs text-muted">Driver Portal</span>
+        </div>
+
+        {/* Page Content */}
+        <main className="flex-1 p-0 pb-24 md:pb-6 md:p-6 overflow-y-auto">{children}</main>
+      </div>
+
+      {/* Bottom Navigation (Mobile) */}
+      <div className="md:hidden">
+        <DriverBottomNavigation onMoreClick={() => setIsMoreMenuOpen(true)} />
+      </div>
+
+      {/* More Menu Drawer */}
+      <DriverMoreDrawer
+        isOpen={isMoreMenuOpen}
+        onClose={() => setIsMoreMenuOpen(false)}
+        onLogout={handleLogout}
+      />
+    </div>
+  );
 }
 
 function Layout({ children }) {
