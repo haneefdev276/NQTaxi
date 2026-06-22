@@ -1,16 +1,36 @@
 import React from 'react';
 
 const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'home' },
-  { id: 'support', label: 'Support & Help Center', icon: 'help' }
+  { id: 'profile', label: 'Driver Profile Management', icon: 'driver' },
+  { id: 'vehicle', label: 'Vehicle Information', icon: 'car' },
+  { id: 'documents', label: 'Documents Management', icon: 'file' },
+  { id: 'support', label: 'Support & Help Center', icon: 'help' },
+  { id: 'referral', label: 'Refer & Earn', icon: 'gift' }
 ];
 
 function NavIcon({ name }) {
   switch (name) {
-    case 'home':
+    case 'driver':
       return (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4.5 w-4.5">
-          <path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9.5z" />
+          <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+        </svg>
+      );
+    case 'car':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4.5 w-4.5">
+          <rect x="2" y="9" width="20" height="8" rx="2" />
+          <path d="M17 9l-2-4H9L7 9" />
+          <circle cx="6" cy="17" r="1.5" />
+          <circle cx="18" cy="17" r="1.5" />
+        </svg>
+      );
+    case 'file':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4.5 w-4.5">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
         </svg>
       );
     case 'help':
@@ -20,12 +40,21 @@ function NavIcon({ name }) {
           <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" />
         </svg>
       );
+    case 'gift':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4.5 w-4.5">
+          <polyline points="20 12 20 22 4 22 4 12" />
+          <rect x="2" y="7" width="20" height="5" />
+          <line x1="12" y1="22" x2="12" y2="7" />
+          <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z" />
+        </svg>
+      );
     default:
       return null;
   }
 }
 
-export default function AdminSidebar({ activePage, onNavigate, isOpen, onClose, onLogout }) {
+export default function DriverSidebar({ activePage, onNavigate, isOpen, onClose, onLogout }) {
   const sidebarContent = (
     <div className="flex h-full flex-col justify-between bg-[#1A1A1A] text-white">
       {/* Upper Area */}
@@ -35,7 +64,7 @@ export default function AdminSidebar({ activePage, onNavigate, isOpen, onClose, 
           <div className="flex items-center gap-2.5">
             <span className="text-xl">🚕</span>
             <span className="text-lg font-black tracking-wider text-white">
-              NQ<span className="text-[#F5C518]">Taxi</span>
+              NQ<span className="text-[#F5C518]">Taxi</span> <span className="text-xs text-gray-400 font-bold ml-1 uppercase">Driver</span>
             </span>
           </div>
           {/* Close button on mobile */}
@@ -52,7 +81,7 @@ export default function AdminSidebar({ activePage, onNavigate, isOpen, onClose, 
         </div>
 
         {/* Navigation list */}
-        <nav className="mt-6 flex flex-col gap-1 px-3" aria-label="Main navigation">
+        <nav className="mt-6 flex flex-col gap-1 px-3" aria-label="Driver navigation">
           {NAV_ITEMS.map((item) => {
             const isActive = activePage === item.id;
             return (
@@ -63,7 +92,7 @@ export default function AdminSidebar({ activePage, onNavigate, isOpen, onClose, 
                   onNavigate(item.id);
                   if (onClose) onClose();
                 }}
-                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-semibold tracking-wide transition-all duration-200 ${
                   isActive
                     ? 'bg-[#F5C518]/10 text-[#F5C518] shadow-sm'
                     : 'text-gray-400 hover:bg-white/[0.03] hover:text-white'
@@ -99,8 +128,8 @@ export default function AdminSidebar({ activePage, onNavigate, isOpen, onClose, 
 
   return (
     <>
-      {/* Desktop Sidebar (Fixed/Static on the left, independent of layout scrolling) */}
-      <aside className="hidden h-screen w-60 shrink-0 border-r border-white/[0.08] bg-[#1A1A1A] md:block fixed left-0 top-0 bottom-0 z-30">
+      {/* Desktop Sidebar (Static on the left, independent of layout scrolling) */}
+      <aside className="hidden h-screen w-60 shrink-0 border-r border-white/[0.08] bg-[#1A1A1A] md:block">
         {sidebarContent}
       </aside>
 

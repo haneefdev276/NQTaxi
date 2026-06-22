@@ -39,6 +39,7 @@ import WalletDashboard from './pages/driver/WalletDashboard';
 import DriverProfileSetup from './pages/driver/DriverProfileSetup';
 import DocumentVerification from './pages/driver/DocumentVerification';
 import DriverHomePage from './pages/driver/DriverHomePage';
+import DriverLogin from './pages/driver/DriverLogin';
 import EarningsDashboard from './pages/driver/EarningsDashboard';
 import DriverStats from './pages/driver/DriverStats';
 import TripHistory from './pages/driver/TripHistory';
@@ -47,13 +48,10 @@ import BankDetailsPayouts from './pages/driver/BankDetailsPayouts';
 import NewRideRequest from "./pages/driver/NewRideRequest";
 
 // Admin Pages
-import DriverManagement from './pages/admin/DriverManagement';
 import Reports from './pages/admin/Reports';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
 import DashboardView from './pages/admin/DashboardView';
-import FleetOverview from './pages/admin/FleetOverview';
-import UsersDirectory from './pages/admin/UsersDirectory';
 
 // Components
 import BookingSpinner from './components/customer/BookingSpinner';
@@ -124,6 +122,7 @@ function App() {
         <Route path="/otp-verification" element={<PublicRoute isAuthenticated={isAuthenticated} role={role}><OTPVerification /></PublicRoute>} />
         
         <Route path="/admin/login" element={<AdminLoginRoute />} />
+        <Route path="/driver/login" element={<DriverLoginRoute />} />
 
         {/* Customer Routes */}
         <Route path="/customer/dashboard" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout><MainContent /></Layout></ProtectedRoute>} />
@@ -143,7 +142,7 @@ function App() {
         <Route path="/customer/ratings" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout><RatingsReviews /></Layout></ProtectedRoute>} />
         <Route path="/customer/payments" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout><SavedUpiCards /></Layout></ProtectedRoute>} />
         <Route path="/customer/trips" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout><TripCostSummary /></Layout></ProtectedRoute>} />
-        <Route path="/customer/drivers" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout><DriverManagement /></Layout></ProtectedRoute>} />
+        <Route path="/customer/drivers" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout><div className="text-white p-6">Drivers page coming soon</div></Layout></ProtectedRoute>} />
         <Route path="/customer/reports" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout><Reports /></Layout></ProtectedRoute>} />
 
         {/* Driver Routes */}
@@ -161,8 +160,7 @@ function App() {
         {/* Admin Routes */}
         <Route path="/admin" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><AdminDashboardRoute /></ProtectedRoute>} />
         <Route path="/admin/dashboard" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><DashboardViewRoute /></ProtectedRoute>} />
-        <Route path="/admin/users" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><UsersDirectoryRoute /></ProtectedRoute>} />
-        <Route path="/admin/fleet" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><FleetOverviewRoute /></ProtectedRoute>} />
+
 
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />
@@ -241,15 +239,6 @@ function App() {
 }
 
 function getDriverRedirectPath(driver) {
-  if (!driver.isOtpVerified) {
-    return "/otp-verification";
-  }
-  if (!driver.profileCompleted || driver.onboardingStep === ONBOARDING_STEPS.STEP_1_PROFILE_SETUP) {
-    return "/driver/profile-setup";
-  }
-  if (!driver.documentsCompleted || driver.onboardingStep === ONBOARDING_STEPS.STEP_2_DOCUMENT_VERIFICATION) {
-    return "/driver/document-verification";
-  }
   return "/driver/dashboard";
 }
 
@@ -406,6 +395,24 @@ function AdminLoginRoute() {
   );
 }
 
+function DriverLoginRoute() {
+  const navigate = useNavigate();
+  const { setAuthenticated, setRole, setDriverOtpVerified, setDriverProfileCompleted, setDriverDocumentsCompleted } = useAppStore();
+
+  return (
+    <DriverLogin
+      onSuccess={() => {
+        setAuthenticated(true);
+        setRole("driver");
+        setDriverOtpVerified(true);
+        setDriverProfileCompleted(true);
+        setDriverDocumentsCompleted(true);
+        navigate("/driver/dashboard", { replace: true });
+      }}
+    />
+  );
+}
+
 function AdminDashboardRoute() {
   const navigate = useNavigate();
   const { setAuthenticated } = useAppStore();
@@ -427,23 +434,13 @@ function DashboardViewRoute() {
   return <DashboardView email="admin@nqtaxi.com" onLogout={() => navigate("/admin/login")} onNavigate={navigate} />;
 }
 
-function UsersDirectoryRoute() {
-  const navigate = useAdminNavigate();
-  return <UsersDirectory email="admin@nqtaxi.com" onLogout={() => navigate("/admin/login")} onNavigate={navigate} />;
-}
 
-function FleetOverviewRoute() {
-  const navigate = useAdminNavigate();
-  return <FleetOverview onLogout={() => navigate("/admin/login")} onNavigate={navigate} />;
-}
 
 function useAdminNavigate() {
   const navigate = useNavigate();
   return (pageId) => {
     const routes = {
       dashboard: "/admin/dashboard",
-      users: "/admin/users",
-      fleet: "/admin/fleet",
     };
     navigate(routes[pageId] || "/admin");
   };
@@ -463,7 +460,7 @@ function DriverLayout({ children }) {
   return (
     <div className="min-h-screen bg-[#0D0D0D] flex flex-col md:flex-row text-white">
       {/* Sidebar (Tablet/Desktop) */}
-      <DriverSidebarNavigation />
+      <DriverSidebarNavigation onLogout={handleLogout} />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">

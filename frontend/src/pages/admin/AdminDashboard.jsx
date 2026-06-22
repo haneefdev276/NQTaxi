@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import DashboardView from './DashboardView';
-import UsersDirectory from './UsersDirectory';
-import FleetOverview from './FleetOverview';
+import SupportInboxPage from './SupportInboxPage';
 
-const PAGES = new Set(['dashboard', 'users', 'fleet']);
+const PAGES = new Set(['dashboard', 'support']);
 
 export default function AdminDashboard({ email, onLogout }) {
   const [activePage, setActivePage] = useState('dashboard');
@@ -14,19 +13,10 @@ export default function AdminDashboard({ email, onLogout }) {
     }
   };
 
-  if (activePage === 'users') {
+  if (activePage === 'support') {
     return (
-      <UsersDirectory
+      <SupportInboxPage
         email={email}
-        onLogout={onLogout}
-        onNavigate={navigate}
-      />
-    );
-  }
-
-  if (activePage === 'fleet') {
-    return (
-      <FleetOverview
         onLogout={onLogout}
         onNavigate={navigate}
       />
