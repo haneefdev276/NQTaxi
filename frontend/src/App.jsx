@@ -15,7 +15,7 @@ import SidebarNavigation from './components/customer/SidebarNavigation';
 // Driver Nav Components
 import DriverBottomNavigation from './components/driver/BottomNavigation';
 import DriverMoreDrawer from './components/driver/MoreDrawer';
-import DriverSidebarNavigation from './components/driver/SidebarNavigation';
+import DriverSidebarNavigation from './components/driver/SideNavigation';
 
 // Customer Pages
 import Homemapbase from './pages/customer/Homemapbase';
@@ -39,9 +39,12 @@ import WalletDashboard from './pages/driver/WalletDashboard';
 import DriverProfileSetup from './pages/driver/DriverProfileSetup';
 import DocumentVerification from './pages/driver/DocumentVerification';
 import DriverHomePage from './pages/driver/DriverHomePage';
+import EarningsDashboard from './pages/driver/EarningsDashboard';
+import DriverStats from './pages/driver/DriverStats';
+import TripHistory from './pages/driver/TripHistory';
+import IncentivesBonuses from './pages/driver/IncentivesBonuses';
+import BankDetailsPayouts from './pages/driver/BankDetailsPayouts';
 import NewRideRequest from "./pages/driver/NewRideRequest";
-import RideAccepted from './pages/driver/RideAccepted';
-import NavigationToPickup from './pages/driver/NavigationToPickup';
 
 // Admin Pages
 import DriverManagement from './pages/admin/DriverManagement';
@@ -80,19 +83,13 @@ function App() {
 
   useEffect(() => {
     initializeAuthService();
-    // TEMP: Clear any existing session for testing
-    logout();
-    setAuthenticated(false);
-    setRole('rider');
-    resetDriverState();
-    // Uncomment below to restore session functionality
-    // const sessionData = restoreAuthSession();
-    // if (sessionData) {
-    //   setAuthenticated(true);
-    //   setRole(sessionData.session.role);
-    // } else {
-    //   setAuthenticated(false);
-    // }
+    const sessionData = restoreAuthSession();
+    if (sessionData) {
+      setAuthenticated(true);
+      setRole(sessionData.session.role);
+    } else {
+      setAuthenticated(false);
+    }
     setAuthReady(true);
   }, [setAuthenticated, setRole]);
 
