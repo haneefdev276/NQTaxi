@@ -7,6 +7,9 @@ import Login from './pages/customer/Login';
 import Register from './pages/customer/Register';
 import OTPVerification from './pages/customer/OTPVerification';
 
+import ForgotPassword from "./pages/customer/ForgotPassword";
+import ResetPassword from "./pages/customer/ResetPassword";
+
 // New Customer Nav Components
 import BottomNavigation from './components/customer/BottomNavigation';
 import MoreDrawer from './components/customer/MoreDrawer';
@@ -45,6 +48,7 @@ import TripHistory from './pages/driver/TripHistory';
 import IncentivesBonuses from './pages/driver/IncentivesBonuses';
 import BankDetailsPayouts from './pages/driver/BankDetailsPayouts';
 import NewRideRequest from "./pages/driver/NewRideRequest";
+
 
 // Admin Pages
 import DriverManagement from './pages/admin/DriverManagement';
@@ -193,6 +197,11 @@ function App() {
         <Route path="/otp-verification" element={<PublicRoute isAuthenticated={isAuthenticated} role={role}><OTPVerification /></PublicRoute>} />
         
         <Route path="/admin/login" element={<AdminLoginRoute />} />
+
+
+
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Customer Routes */}
         <Route path="/customer/dashboard" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="rider"><Layout>{renderMainContent()}</Layout></ProtectedRoute>} />
