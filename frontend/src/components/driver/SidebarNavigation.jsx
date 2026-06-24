@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { activeTripNavItems, accountNavItems } from './NavigationConfig';
+import { overviewNavItems, activeTripNavItems, accountNavItems } from './NavigationConfig';
 import { clsx } from 'clsx';
 import { LogOut } from 'lucide-react';
 
@@ -68,10 +67,20 @@ export default function SidebarNavigation({ onLogout }) {
 
       {/* Nav Items */}
       <nav className="flex-1 overflow-y-auto p-4 space-y-6">
+        {/* Overview & Earnings Section */}
+        <div className="space-y-2">
+          <div className="text-[10px] font-bold text-muted uppercase tracking-wider px-4">
+            Overview &amp; Earnings
+          </div>
+          <div className="space-y-1">
+            {overviewNavItems.map(renderNavItem)}
+          </div>
+        </div>
+
         {/* Active Ride Section */}
         <div className="space-y-2">
           <div className="text-[10px] font-bold text-muted uppercase tracking-wider px-4">
-            Active Ride
+            Active Ride Flow
           </div>
           <div className="space-y-1">
             {activeTripNavItems.map(renderNavItem)}
@@ -105,5 +114,3 @@ export default function SidebarNavigation({ onLogout }) {
     </aside>
   );
 }
-
-

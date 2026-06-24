@@ -76,5 +76,4 @@ export const directoryUsers = [
     role: 'Support',
     avatar: { type: 'initials', initials: 'AF', variant: 'green' },
   },
- 
 ];

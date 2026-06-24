@@ -20,11 +20,21 @@ import {
   ChevronUp,
   Info
 } from 'lucide-react';
+import { FaCar, FaMoneyBillWave, FaStar } from 'react-icons/fa';
 import { useAppStore } from '../../store/useAppStore';
 import { logout } from '../../services/authService';
 import DriverLayout from '../../layouts/DriverLayout';
 
-// Active ride components
+// Components from develop
+import DriverHeader from '../../components/driver/DriverHeader';
+import OnlineToggle from '../../components/driver/OnlineToggle';
+import DriverStatsCard from '../../components/driver/DriverStatsCard';
+import RecentRideCard from '../../components/driver/RecentRideCard';
+
+// Data from develop
+import { driverInfo, driverStats, recentRides } from '../../data/driverDashboardData';
+
+// Active ride components (fallback/hash compatibility)
 import RideInProgress from '../../components/driver/RiderProgress';
 import TripCompletion from '../../components/driver/TripCompletion';
 import TripDetails from '../../components/driver/TripDetails';
@@ -39,23 +49,28 @@ export default function DriverHomePage() {
   const location = useLocation();
   const { setAuthenticated, setRole, resetDriverState } = useAppStore();
 
-  // Tab State reactively derived from URL hash, defaulting to 'profile'
-  const activePage = location.hash ? location.hash.replace('#', '') : 'profile';
+  // Tab State reactively derived from URL hash, defaulting to 'dashboard'
+  const activePage = location.hash ? location.hash.replace('#', '') : 'dashboard';
+
+  // Online Toggler State (from develop)
+  const [isOnline, setIsOnline] = useState(false);
+
+  const handleToggle = () => {
+    const newState = !isOnline;
+    setIsOnline(newState);
+
+    if (newState) {
+      setTimeout(() => {
+        navigate('/driver/new-request');
+      }, 2000);
+    }
+  };
 
   // Success Banner State
   const [toastMessage, setToastMessage] = useState('');
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 3000);
-  };
-
-  // Mock Logout
-  const handleLogout = () => {
-    logout();
-    setAuthenticated(false);
-    setRole('rider');
-    resetDriverState();
-    navigate('/driver/login', { replace: true });
   };
 
   // --- Sub-States ---
@@ -174,10 +189,54 @@ export default function DriverHomePage() {
       {/* Main Tab Render Switcher */}
       <div className="mx-auto max-w-5xl space-y-6">
         
+        {/* --- DEFAULT DASHBOARD OVERVIEW --- */}
+        {activePage === 'dashboard' && (
+          <div className="space-y-6">
+            <DriverHeader driver={driverInfo} />
+            <div className="flex flex-col gap-6 p-1 md:p-2">
+              <section className="space-y-4 rounded-3xl border border-white/10 bg-[#1A1A1A] p-6 shadow-lg">
+                <OnlineToggle isOnline={isOnline} onToggle={handleToggle} />
+                
+                <h3 className="text-lg font-bold text-white">Today's Overview</h3>
+                <div className="grid grid-cols-3 gap-4">
+                  <DriverStatsCard
+                    icon={<FaCar className="text-xl text-[#F5C518]" />}
+                    value={driverStats.rides}
+                    title="Rides"
+                  />
+                  <DriverStatsCard
+                    icon={<FaMoneyBillWave className="text-xl text-[#4CAF50]" />}
+                    value={`Rs. ${driverStats.earnings}`}
+                    title="Earnings"
+                  />
+                  <DriverStatsCard
+                    icon={<FaStar className="text-xl text-[#F5C518]" />}
+                    value={driverStats.rating}
+                    title="Rating"
+                  />
+                </div>
+
+                <div className="pt-4">
+                  <h3 className="mb-3 text-lg font-bold text-white">Recent Rides</h3>
+                  <div className="space-y-3">
+                    {recentRides.map((ride) => (
+                      <RecentRideCard
+                        key={ride.id}
+                        customer={ride.customer}
+                        pickup={ride.pickup}
+                        fare={ride.fare}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        )}
+
         {/* --- PROFILE TABS --- */}
         {activePage === 'profile' && (
           <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            
             {/* Profile Overview Card */}
             <article className="rounded-2xl border border-white/[0.08] bg-[#1A1A1A] p-6 shadow-lg flex flex-col items-center text-center">
               <div className="relative mb-4">
@@ -396,7 +455,6 @@ export default function DriverHomePage() {
         {/* --- VEHICLE INFORMATION --- */}
         {activePage === 'vehicle' && (
           <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            
             {/* Vehicle Registration Summary Card */}
             <article className="rounded-2xl border border-white/[0.08] bg-[#1A1A1A] p-6 shadow-lg flex flex-col justify-between">
               <div>
@@ -593,7 +651,6 @@ export default function DriverHomePage() {
         {/* --- SUPPORT & HELP CENTER --- */}
         {activePage === 'support' && (
           <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            
             {/* FAQ Panel */}
             <article className="rounded-2xl border border-white/[0.08] bg-[#1A1A1A] p-6 shadow-lg">
               <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-white/[0.08] pb-4 mb-6">
@@ -703,7 +760,6 @@ export default function DriverHomePage() {
         {/* --- REFER & EARN --- */}
         {activePage === 'referral' && (
           <section className="space-y-6">
-            
             {/* Referral Stats Banner Card */}
             <article className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#1A1A1A] p-6 shadow-lg">
               <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgba(245,197,24,0.1)_0%,transparent_70%)] pointer-events-none" />
@@ -796,11 +852,10 @@ export default function DriverHomePage() {
                 </table>
               </div>
             </article>
-
           </section>
         )}
 
-        {/* --- ACTIVE RIDE TABS --- */}
+        {/* --- ACTIVE RIDE TABS (COMPATIBILITY / FALLBACK) --- */}
         {activePage === 'ride-in-progress' && <RideInProgress />}
         {activePage === 'trip-completion' && <TripCompletion />}
         {activePage === 'trip-details' && <TripDetails />}
