@@ -1,11 +1,11 @@
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: 'home' },
-  { id: 'analytics', label: 'Analytics', icon: 'chart', disabled: true },
+  { id: 'analytics', label: 'Analytics', icon: 'chart' },
   { id: 'fleet', label: 'Fleet', icon: 'truck' },
   { id: 'users', label: 'Users', icon: 'users' },
-  { id: 'mail', label: 'Mail', icon: 'mail', disabled: true },
-  { id: 'settings', label: 'Settings', icon: 'settings', disabled: true },
-  { id: 'calendar', label: 'Calendar', icon: 'calendar', disabled: true },
+  { id: 'mail', label: 'Mail', icon: 'mail' },
+  { id: 'settings', label: 'Settings', icon: 'settings' },
+  { id: 'calendar', label: 'Calendar', icon: 'calendar' },
 ];
 
 function NavIcon({ name }) {
@@ -65,7 +65,7 @@ const navItemBase =
 export default function AdminSidebar({ activePage, onNavigate }) {
   return (
     <aside
-      className="flex w-full shrink-0 flex-row items-center justify-center gap-6 border-b border-white/[0.08] bg-bg-secondary px-3 py-3 md:w-[4.5rem] md:flex-col md:border-b-0 md:border-r md:py-5"
+      className="flex w-full shrink-0 flex-row items-center justify-center gap-6 border-b border-white/[0.08] bg-bg-secondary px-3 py-3 md:w-[4.5rem] md:h-screen md:sticky md:top-0 md:flex-col md:border-b-0 md:border-r md:py-5"
       aria-label="Main navigation"
     >
       <button type="button" className="hidden flex-col gap-0.5 p-1.5 md:flex" aria-label="Menu">
