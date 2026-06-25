@@ -19,14 +19,50 @@ export default function LiveTrackingCard() {
           className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:28px_28px] opacity-60"
           aria-hidden="true"
         />
+
+        {/* SVG Road Network */}
+        <svg className="absolute inset-0 h-full w-full opacity-40" aria-hidden="true">
+          <path d="M0 60 Q120 40 200 70 T400 50" fill="none" stroke="#2a2a2a" strokeWidth="6" strokeLinecap="round" />
+          <path d="M50 0 L120 300" fill="none" stroke="#2a2a2a" strokeWidth="4" strokeLinecap="round" />
+          <path d="M250 0 L200 300" fill="none" stroke="#2a2a2a" strokeWidth="4" strokeLinecap="round" />
+          
+          {/* Active Animated Route */}
+          <path
+            d="M50 80 Q140 60 210 110"
+            fill="none"
+            stroke="#F5C518"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M50 80 Q140 60 210 110"
+            fill="none"
+            stroke="#FFFFFF"
+            strokeWidth="1.5"
+            strokeDasharray="4 6"
+            strokeLinecap="round"
+            className="animate-[dash_15s_linear_infinite]"
+          />
+        </svg>
+
+        {/* Pulse Indicators */}
         <span
-          className="absolute left-[42%] top-[38%] h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_0_4px_rgba(245,197,24,0.15)]"
+          className="absolute left-[48px] top-[74px] h-2.5 w-2.5 rounded-full bg-[#F5C518] shadow-[0_0_8px_rgba(245,197,24,0.5)]"
           aria-hidden="true"
         />
         <span
-          className="absolute left-[62%] top-[58%] h-2.5 w-2.5 rounded-full bg-success shadow-[0_0_0_4px_rgba(34,197,94,0.15)]"
+          className="absolute left-[206px] top-[104px] h-2.5 w-2.5 rounded-full bg-success shadow-[0_0_8px_rgba(34,197,94,0.5)]"
           aria-hidden="true"
         />
+
+        <style>{`
+          @keyframes dash {
+            to {
+              stroke-dashoffset: -1000;
+            }
+          }
+        `}</style>
       </div>
 
       <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-bg-tertiary px-4 py-3.5">

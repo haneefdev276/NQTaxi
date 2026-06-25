@@ -65,6 +65,9 @@ import AdminLogin from './pages/admin/AdminLogin';
 import DashboardView from './pages/admin/DashboardView';
 import FleetOverview from './pages/admin/FleetOverview';
 import UsersDirectory from './pages/admin/UsersDirectory';
+import FareSettingsPage from './pages/admin/FareSettingsPage';
+import SupportInboxPage from './pages/admin/SupportInboxPage';
+import BookingsTablePage from './pages/admin/BookingsTablePage';
 
 // Components
 import BookingSpinner from './components/customer/BookingSpinner';
@@ -255,6 +258,10 @@ function App() {
         <Route path="/admin/dashboard" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><DashboardViewRoute /></ProtectedRoute>} />
         <Route path="/admin/users" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><UsersDirectoryRoute /></ProtectedRoute>} />
         <Route path="/admin/fleet" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><FleetOverviewRoute /></ProtectedRoute>} />
+        <Route path="/admin/analytics" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><AnalyticsRoute /></ProtectedRoute>} />
+        <Route path="/admin/mail" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><MailRoute /></ProtectedRoute>} />
+        <Route path="/admin/settings" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><SettingsRoute /></ProtectedRoute>} />
+        <Route path="/admin/calendar" element={<ProtectedRoute authReady={authReady} isAuthenticated={isAuthenticated} role={role} allowedRole="admin"><CalendarRoute /></ProtectedRoute>} />
 
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />
@@ -461,6 +468,26 @@ function FleetOverviewRoute() {
   return <FleetOverview onLogout={() => navigate("/admin/login")} onNavigate={navigate} />;
 }
 
+function AnalyticsRoute() {
+  const navigate = useAdminNavigate();
+  return <Reports email="admin@nqtaxi.com" onLogout={() => navigate("/admin/login")} onNavigate={navigate} />;
+}
+
+function MailRoute() {
+  const navigate = useAdminNavigate();
+  return <SupportInboxPage email="admin@nqtaxi.com" onLogout={() => navigate("/admin/login")} onNavigate={navigate} />;
+}
+
+function SettingsRoute() {
+  const navigate = useAdminNavigate();
+  return <FareSettingsPage email="admin@nqtaxi.com" onLogout={() => navigate("/admin/login")} onNavigate={navigate} />;
+}
+
+function CalendarRoute() {
+  const navigate = useAdminNavigate();
+  return <BookingsTablePage email="admin@nqtaxi.com" onLogout={() => navigate("/admin/login")} onNavigate={navigate} />;
+}
+
 function useAdminNavigate() {
   const navigate = useNavigate();
   return (pageId) => {
@@ -468,6 +495,10 @@ function useAdminNavigate() {
       dashboard: "/admin/dashboard",
       users: "/admin/users",
       fleet: "/admin/fleet",
+      analytics: "/admin/analytics",
+      mail: "/admin/mail",
+      settings: "/admin/settings",
+      calendar: "/admin/calendar",
     };
     navigate(routes[pageId] || "/admin");
   };
