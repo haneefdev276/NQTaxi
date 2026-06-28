@@ -79,8 +79,10 @@ export const moreMenuItems = {
     { id: 'sos', label: 'SOS Safety', icon: ShieldAlert, path: '/customer/sos' },
   ],
   account: [
+    { id: 'profile-setup', label: 'Profile Setup', icon: User, path: '/driver/profile-setup' },
+    { id: 'document-verification', label: 'Documents', icon: FileText, path: '/driver/document-verification' },
     { id: 'logout', label: 'Log Out', icon: LogOut, path: '#', action: true },
   ],
 };
 
-export const sidebarNavItems = activeTripNavItems;
+export const sidebarNavItems = overviewNavItems;
