@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import AdminLayout from '../../components/layout/AdminLayout';
+import AdminLayout from '../../layouts/AdminLayout';
 import FarePageHeader from '../../components/admin/fare/FarePageHeader';
 import FareStatsOverview from '../../components/admin/fare/FareStatsOverview';
 import FareDataGrid from '../../components/admin/fare/FareDataGrid';
@@ -48,7 +48,7 @@ function computeStats(fareTypes, pricingRules, commission) {
   };
 }
 
-export default function FareSettingsPage() {
+export default function FareSettingsPage({ email = 'admin@example.com', onLogout, onNavigate }) {
   const [initial] = useState(loadSettings);
   const [fareTypes, setFareTypes] = useState(initial.fareTypes);
   const [pricingRules, setPricingRules] = useState(initial.pricingRules);
@@ -230,7 +230,7 @@ export default function FareSettingsPage() {
   };
 
   return (
-    <AdminLayout activePage="fare" variant="dark">
+    <AdminLayout activePage="settings" onNavigate={onNavigate} onLogout={onLogout}>
       <Toaster
         position="top-right"
         toastOptions={{

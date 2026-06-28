@@ -37,6 +37,7 @@ export default function RecentBookingsTable({ bookings }) {
         </h2>
         <button
           type="button"
+          onClick={() => alert("Bookings detail log is under development.")}
           className="cursor-pointer border-none bg-transparent p-0 text-xs font-semibold text-[#F5C518] hover:text-[#D4A80E] hover:underline"
         >
           View All

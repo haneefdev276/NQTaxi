@@ -54,6 +54,17 @@ export default function LiveTrackingCard() {
             className="animate-pulse"
           />
 
+          {/* Animated Route Dash Overlay */}
+          <path
+            d="M 68 62 Q 90 98 120 100 T 260 178"
+            fill="none"
+            stroke="#FFFFFF"
+            strokeWidth="1.5"
+            strokeDasharray="4 6"
+            strokeLinecap="round"
+            className="animate-[dash_15s_linear_infinite]"
+          />
+
           {/* Map Labels */}
           <text x="75" y="45" fill="rgba(255,255,255,0.3)" fontSize="8" fontWeight="500">Connaught Place</text>
           <text x="32" y="132" fill="rgba(255,255,255,0.2)" fontSize="8">Janpath</text>
@@ -96,6 +107,15 @@ export default function LiveTrackingCard() {
             <circle cx="6" cy="2" r="0.75" fill="#FFFFFF" />
           </g>
         </svg>
+
+        <style>{`
+          @keyframes dash {
+            to {
+              stroke-dashoffset: -1000;
+            }
+          }
+        `}</style>
+
       </div>
 
       {/* Driver Status Panel */}

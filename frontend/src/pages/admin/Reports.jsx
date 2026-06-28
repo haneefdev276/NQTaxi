@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import AdminLayout from '../../layouts/AdminLayout';
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(amount || 0);
@@ -35,7 +36,7 @@ const downloadCSV = (data, filename) => {
   URL.revokeObjectURL(url);
 };
 
-export default function Reports() {
+export default function Reports({ email = "admin@example.com", onLogout, onNavigate }) {
   const [reportType, setReportType] = useState("drivers");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -132,7 +133,8 @@ export default function Reports() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl">
+    <AdminLayout activePage="analytics" onNavigate={onNavigate} onLogout={onLogout}>
+      <div className="mx-auto max-w-7xl p-5 md:p-8">
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -251,5 +253,6 @@ export default function Reports() {
         )}
       </div>
     </div>
+    </AdminLayout>
   );
 }

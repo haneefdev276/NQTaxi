@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   User,
@@ -32,7 +32,6 @@ import DriverStatsCard from '../../components/driver/DriverStatsCard';
 import RecentRideCard from '../../components/driver/RecentRideCard';
 import NavigationMap from '../../components/driver/NavigationMap';
 
-
 // Data from develop
 import { driverInfo, driverStats, recentRides } from '../../data/driverDashboardData';
 
@@ -46,7 +45,6 @@ import CustomerRating from '../../components/driver/CustomerRating';
 const INPUT_CLASS =
   'w-full rounded-xl border border-white/10 bg-[#242424] px-4 py-3 font-sans text-sm text-white outline-none transition-[border-color,box-shadow] placeholder:text-gray-500 focus:border-[#F5C518] focus:shadow-[0_0_0_3px_rgba(245,197,24,0.25)] disabled:cursor-not-allowed disabled:opacity-60';
 
-
 export default function DriverHomePage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,16 +56,37 @@ export default function DriverHomePage() {
   // Online Toggler State (from develop)
   const [isOnline, setIsOnline] = useState(false);
 
+  useEffect(() => {
+    if (!isOnline) return;
+
+    const checkActiveBooking = (bookingString) => {
+      try {
+        const booking = bookingString ? JSON.parse(bookingString) : null;
+        if (booking && booking.status === "pending") {
+          // Play simulated notification sound or prompt if desired, then navigate
+          navigate("/driver/new-request");
+        }
+      } catch (err) {
+        console.error("Error reading active booking", err);
+      }
+    };
+
+    const handleStorageChange = (e) => {
+      if (e.key === "nqtaxi_active_booking") {
+        checkActiveBooking(e.newValue);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Initial check when toggled online
+    checkActiveBooking(localStorage.getItem("nqtaxi_active_booking"));
+
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [isOnline, navigate]);
+
   const handleToggle = () => {
-    const newState = !isOnline;
-    setIsOnline(newState);
-
-    if (newState) {
-      setTimeout(() => {
-        navigate('/driver/new-request');
-      }, 3500);
-
-    }
+    setIsOnline((prev) => !prev);
   };
 
   // Success Banner State
@@ -896,7 +915,6 @@ export default function DriverHomePage() {
         {activePage === 'trip-details' && <TripDetails />}
         {activePage === 'payment-confirmation' && <PaymentConfirmation />}
         {activePage === 'customer-rating' && <CustomerRating />}
-
       </div>
     </DriverLayout>
   );
