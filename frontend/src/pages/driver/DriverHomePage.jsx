@@ -21,7 +21,7 @@ import {
   Info
 } from 'lucide-react';
 import { FaCar, FaMoneyBillWave, FaStar } from 'react-icons/fa';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore, DRIVER_STATUS } from '../../store/useAppStore';
 import { logout } from '../../services/authService';
 import DriverLayout from '../../layouts/DriverLayout';
 
@@ -48,13 +48,13 @@ const INPUT_CLASS =
 export default function DriverHomePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setAuthenticated, setRole, resetDriverState } = useAppStore();
+  const { setAuthenticated, setRole, resetDriverState, driver, setDriverStatus } = useAppStore();
 
   // Tab State reactively derived from URL hash, defaulting to 'dashboard'
   const activePage = location.hash ? location.hash.replace('#', '') : 'dashboard';
 
-  // Online Toggler State (from develop)
-  const [isOnline, setIsOnline] = useState(false);
+  // Online Toggler State (retrieved from global store to persist across page navigations/unmounts)
+  const isOnline = driver.status === DRIVER_STATUS.ONLINE;
 
   useEffect(() => {
     if (!isOnline) return;
@@ -86,7 +86,8 @@ export default function DriverHomePage() {
   }, [isOnline, navigate]);
 
   const handleToggle = () => {
-    setIsOnline((prev) => !prev);
+    const nextStatus = isOnline ? DRIVER_STATUS.OFFLINE : DRIVER_STATUS.ONLINE;
+    setDriverStatus(nextStatus);
   };
 
   // Success Banner State
